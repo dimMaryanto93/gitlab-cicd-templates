@@ -8,5 +8,10 @@ include:
 build:docker:
   stage: build
   extends: .build-docker
+  services:
+    - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:${DOCKER_DIND_VERSION}
+      entrypoint: [ "dockerd-entrypoint.sh" ]
+      alias: dockerd
+      command: ["--insecure-registry=myregistry.gitlab.com"]
   variables:
     DOCKER_BUILD_ARGS_ENTRIPOINT: "--build-arg PROXY_REGISTRY=${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}"
